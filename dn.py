@@ -39,7 +39,12 @@ def main():
 
     from datetime import datetime
     date = datetime.today().strftime('%Y-%m-%d_%H:%M:%S')
-    df.to_csv(f'DN_Förstasidan_{date}.csv', index=False)
+    output_dir = 'output'
+    try:
+        df.to_csv(f'{output_dir}/DN_Förstasidan_{date}.csv', index=False)
+        print('.csv file exported successfully!')
+    except:
+        print('Error exporting file!')
 
 if __name__ == "__main__":
     main()

@@ -11,28 +11,36 @@ def main():
     master_list = []
 
     for teaser in teaser_container:
+        # Scrape titles
         data_dict = {}
+        banned_titles = ['Sudoku']
         tc = teaser.find("div", {"class": "teaser__content"})
 
         try:
             title = ' '.join(tc.h1.text.split())
             title = title.replace('•', '').strip()
-            data_dict['Title'] = title
+            if title not in banned_titles:
+                data_dict['Title'] = title
         except:
             continue
         
+        # Scrape subtitles
         try:
+            if not data_dict['Title']:
+                continue
             subtitle = ' '.join(tc.p.text.split())
             subtitle = subtitle.replace('•', '-').replace('TV | TEXT', '').replace('LIVE', '').strip()
             data_dict['Subtitle'] = subtitle
         except:
             data_dict['Subtitle'] = ''
-        
+       
+        # Scrape article links 
         try:
             link = 'https://www.dn.se'+teaser.find('a')['href']
             data_dict['Link'] = link
         except:
             pass
+
         master_list.append(data_dict)
 
     df = pd.DataFrame(master_list)
